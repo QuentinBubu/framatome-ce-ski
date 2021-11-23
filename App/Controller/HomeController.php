@@ -2,7 +2,6 @@
 namespace App\Controller;
 
 use App\Views\Page;
-use Bubu\Http\HttpRequire\HttpRequire;
 use Bubu\Http\Session\Session;
 
 class HomeController
@@ -12,7 +11,6 @@ class HomeController
      */
     public static function create()
     {
-        HttpRequire::https();
         (new Page)->show('home');
     }
 
