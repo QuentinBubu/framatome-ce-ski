@@ -1,8 +1,15 @@
 {
+    "autoload": {
+        "psr-4": {
+            "Bubu\\": "src/",
+            "App\\": "App/"
+        }
+    },
     "require": {
         "bubu-framework/database": "^1.0",
         "bubu-framework/http": "^1.0",
-        "altorouter/altorouter": "^2.0",
-        "bubu-framework/flash": "^1.0"
+        "bubu-framework/flash": "^1.0",
+        "bubu-framework/auth": "^1.0",
+        "phpmailer/phpmailer": "^6.5"
     }
 }
