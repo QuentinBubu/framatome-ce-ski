@@ -1,8 +1,8 @@
 <?php
 namespace App\Views;
 
-use Bubu\ExtendHtmlTags\ExtendHtmlTags;
 use Bubu\Http\Reponse\Reponse;
+use Bubu\ExtendHtmlTags\ExtendHtmlTags;
 
 class Page
 {
@@ -28,8 +28,8 @@ class Page
         $this->pageContent = file_get_contents("templates/{$page}.bubu.php", true);
         $this->pageContent = ExtendHtmlTags::create($this)->pageContent;
 
-        $message = $this->pageMessage ?? $reponse->getHttpCode();
-        $code    = $this->pageCode ?? $reponse->getHttpMessage();
+        $message = $this->pageMessage ?? $reponse->getHttpMessage();
+        $code    = $this->pageCode ?? $reponse->getHttpCode();
 
         ob_start();
         echo eval('?>' . $this->pageContent);
