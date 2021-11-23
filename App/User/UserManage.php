@@ -24,9 +24,9 @@ class UserManage
         string $mail
     ) {
         $mailFetch = Database::queryBuilder('users')
-        ->select('mail')
+        ->select('email')
         ->where(
-            Database::expr()->eq('mail', 'mail', $mail)
+            Database::expr()->eq('email', ':email', $mail)
         )
         ->fetch();
 
@@ -100,7 +100,7 @@ class UserManage
         $dbData = Database::queryBuilder('users')
             ->select('id', 'password', 'email_verified_at', 'token')
             ->where(
-                Database::expr()->eq('mail', 'mail', $mail)
+                Database::expr()->eq('email', ':email', $mail)
             )
             ->fetch();
 
@@ -113,7 +113,7 @@ class UserManage
         } else {
             Session::set('token', $dbData['token']);
             Session::set('User', []);
-            Session::push('User', $dbData['id']);
+            Session::push('User', ['id' => $dbData['id']]);
             if ($keepSession) {
                 Session::changeSessionLifetime($_ENV['SESSION_KEEP_CONNECT']);
             }

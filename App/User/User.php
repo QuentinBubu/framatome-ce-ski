@@ -3,7 +3,7 @@ namespace App\User;
 
 use Bubu\Http\Session\Session;
 
-class User
+class User extends UserManage
 {
     public static function getId(): int
     {
