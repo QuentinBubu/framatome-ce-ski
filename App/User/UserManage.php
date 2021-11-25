@@ -37,8 +37,8 @@ class UserManage
         ) {
             return $GLOBALS['lang']['not-same-password'];
         } elseif (
-            strlen($password) <= 10
-            || strlen($password) >= 30
+            strlen($password) < 10
+            || strlen($password) > 30
         ) {
             return $GLOBALS['lang']['password-length'];
         } elseif (
