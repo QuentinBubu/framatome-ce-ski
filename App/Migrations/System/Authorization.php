@@ -11,7 +11,7 @@ class Authorization
         if ($securityKey !== $_ENV['MIGRATION_SECURITY_KEY']) throw new \Exception('Invalid security key');
         self::createAuthorization([
             // authorization list
-            'create', 'read', 'comment', 'moderator', 'administrator' // etc
+            'access', 'create', 'read', 'comment', 'moderator', 'administrator' // etc
         ]);
     }
 

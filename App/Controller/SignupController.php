@@ -31,4 +31,10 @@ class SignupController
             (new Page)->pageMessage($return)->pageCode(0)->show('error');
         }
     }
+
+    public static function verifyMail(string $token = null)
+    {
+        if (is_null($token)) exit(header('Location: /'));
+        var_dump(User::validMail($token));
+    }
 }

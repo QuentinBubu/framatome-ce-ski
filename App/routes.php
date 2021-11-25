@@ -13,6 +13,8 @@ $router->post('/login', 'Login#store');
 $router->get('/signup', 'Signup#create');
 $router->post('/signup', 'Signup#store');
 
+$router->get('/validEmail/:token', 'Signup#verifyMail');
+
 $router->get('/admin', 'Admin#create');
 
 $router->run();

@@ -70,7 +70,7 @@ class UserManage
                     <body>
                         <p>
                             S'il vous plaît, suivez ce lien pour valider votre demande d'inscription: 
-                            <a href="{$_SERVER['SERVER_NAME']}/validEmail?code={$emailCode}">
+                            <a href="{$_SERVER['SERVER_NAME']}/validEmail/{$emailCode}">
                                {$_SERVER['SERVER_NAME']}/validEmail?code={$emailCode}
                             </a>
                         </p>
@@ -119,5 +119,42 @@ class UserManage
             }
             return true;
         }
+    }
+
+    /**
+     * Valide account by token
+     *
+     * @param string $token
+     * @return boolean
+     */
+    public static function validMail(string $token): bool
+    {
+        $user = Database::queryBuilder('users')
+            ->select('email_verification_code')
+            ->where(
+                Database::expr()->eq('email_verification_code', ':email_verification_code', $token)
+            )
+            ->fetch();
+
+        if ($user != false && count($user) != 0) {
+            if ($user['email_verification_code'] === $token) {
+                Database::queryBuilder('users')
+                    ->update(
+                        [
+                            'email_verified_at' => date('Y-m-d H:i:s'),
+                            'email_verification_code' => null
+                        ]
+                    )
+                    ->where(
+                        Database::expr()->eq('email_verification_code', ':email_verification_code', $token)
+                    )
+                    ->execute();
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 }
