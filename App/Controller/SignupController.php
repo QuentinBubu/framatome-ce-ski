@@ -35,6 +35,10 @@ class SignupController
     public static function verifyMail(string $token = null)
     {
         if (is_null($token)) exit(header('Location: /'));
-        var_dump(User::validMail($token));
+        if (User::validMail($token)) {
+            (new Page)->pageMessage('Mail validé!')->pageCode(0)->show('error');
+        } else {
+            (new Page)->pageMessage('Erreur!')->pageCode(0)->show('error');
+        }
     }
 }

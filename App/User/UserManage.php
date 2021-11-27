@@ -26,7 +26,7 @@ class UserManage
         $mailFetch = Database::queryBuilder('users')
         ->select('email')
         ->where(
-            Database::expr()->eq('email', ':email', $mail)
+            Database::expr()->eq('email', $mail)
         )
         ->fetch();
 
@@ -100,7 +100,7 @@ class UserManage
         $dbData = Database::queryBuilder('users')
             ->select('id', 'password', 'email_verified_at', 'token')
             ->where(
-                Database::expr()->eq('email', ':email', $mail)
+                Database::expr()->eq('email', $mail)
             )
             ->fetch();
 
@@ -111,6 +111,17 @@ class UserManage
         } elseif (is_null($dbData['email_verified_at'])) {
             return $GLOBALS['lang']['email-not-verified'];
         } else {
+
+            $userAuth = Database::queryBuilder('authorization')
+                ->select('access')
+                ->where(
+                    Database::expr()::eq('id', $dbData['id'])
+                )
+                ->fetch();
+
+            if (!$userAuth || !$userAuth['access']) {
+                return 'En attente de validation';
+            }
             Session::set('token', $dbData['token']);
             Session::set('User', []);
             Session::push('User', ['id' => $dbData['id']]);
@@ -132,7 +143,7 @@ class UserManage
         $user = Database::queryBuilder('users')
             ->select('email_verification_code')
             ->where(
-                Database::expr()->eq('email_verification_code', ':email_verification_code', $token)
+                Database::expr()->eq('email_verification_code', $token)
             )
             ->fetch();
 
@@ -146,7 +157,7 @@ class UserManage
                         ]
                     )
                     ->where(
-                        Database::expr()->eq('email_verification_code', ':email_verification_code', $token)
+                        Database::expr()->eq('email_verification_code', $token)
                     )
                     ->execute();
                 return true;
