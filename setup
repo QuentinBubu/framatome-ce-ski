@@ -1,0 +1,40 @@
+#!/usr/bin/php
+
+<?php
+
+require 'vendor/autoload.php';
+
+use App\Migrations\System\Authorization;
+use App\Migrations\System\Sorties;
+use App\Migrations\System\Users;
+use App\Migrations\System\UsersSorties;
+
+$repository = Dotenv\Repository\RepositoryBuilder::createWithDefaultAdapters()->make();
+$dotenv = Dotenv\Dotenv::create($repository, './');
+$dotenv->load();
+
+echo '0/ Setup migration' . PHP_EOL;
+
+switch ((int) readline('Action? ')) {
+    case 0:
+        echo 'Users, Authorization, Sorties, UsersSorties' . PHP_EOL;
+        switch (readline('Migration? ')) {
+            case 'Users':
+                Users::create(readline('Security key: '));
+                break;
+            case 'Authorization':
+                Authorization::create(readline('Security key: '));
+                break;
+            case 'Sorties':
+                Sorties::create(readline('Security key: '));
+                break;
+            case 'UsersSorties':
+                UsersSorties::create(readline('Security key: '));
+                break;
+            default:
+                echo 'Not class found' . PHP_EOL;
+                break;
+        }
+
+        break;
+}

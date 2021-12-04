@@ -9,4 +9,14 @@ class User extends UserManage
     {
         return Session::get('User')['id'];
     }
+
+    public static function getUsername(): string
+    {
+        return Session::get('User')['username'];
+    }
+
+    public static function getEmail(): string
+    {
+        return Session::get('User')['email'];
+    }
 }

@@ -98,7 +98,7 @@ class UserManage
         bool $keepSession = false
     ): mixed {
         $dbData = Database::queryBuilder('users')
-            ->select('id', 'password', 'email_verified_at', 'token')
+            ->select('id', 'email', 'username', 'password', 'email_verified_at', 'token')
             ->where(
                 Database::expr()->eq('email', $mail)
             )
@@ -122,12 +122,15 @@ class UserManage
             if (!$userAuth || !$userAuth['access']) {
                 return 'En attente de validation';
             }
+            Session::delete('token');
+            Session::delete('User');
+            Session::delete('authorization');
             Session::set('token', $dbData['token']);
             Session::set('User', []);
             Session::push('User', ['id' => $dbData['id']]);
-            if ($keepSession) {
-                Session::changeSessionLifetime($_ENV['SESSION_KEEP_CONNECT']);
-            }
+            Session::push('User', ['email' => $dbData['email']]);
+            Session::push('User', ['username' => $dbData['username']]);
+            if ($keepSession) Session::changeSessionLifetime($_ENV['SESSION_KEEP_CONNECT']);
             return true;
         }
     }
@@ -141,7 +144,7 @@ class UserManage
     public static function validMail(string $token): bool
     {
         $user = Database::queryBuilder('users')
-            ->select('email_verification_code')
+            ->select('id', 'email_verification_code')
             ->where(
                 Database::expr()->eq('email_verification_code', $token)
             )
@@ -160,6 +163,10 @@ class UserManage
                         Database::expr()->eq('email_verification_code', $token)
                     )
                     ->execute();
+                Database::queryBuilder('authorization')
+                    ->insert([
+                            'id' => $user['id']
+                    ])->execute();
                 return true;
             } else {
                 return false;

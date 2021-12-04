@@ -15,7 +15,12 @@ class LoginController
      */
     public static function create()
     {
-        (new Page)->show('login');
+        if (Session::exists('User') && Authorization::hasAuthorization(User::getId(), 'access')) {
+            header('Location: /members');
+            exit;
+        } else {
+            (new Page)->show('login');
+        }
     }
 
     public static function store()
