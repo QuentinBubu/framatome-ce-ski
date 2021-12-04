@@ -25,6 +25,7 @@ $waitingSorties = Database::queryBuilder('sorties')
     ->where(
         Database::expr()::gt('date', date('Y-m-d'))
     )
+    ->orderBy('date')
     ->fetchAll();
 
 $newForm = AdminPage::waitConfirmSignup();
@@ -113,6 +114,11 @@ $newForm = AdminPage::waitConfirmSignup();
             </tbody>
         </table>
     <?php endforeach; ?>
+    <hr>
+    <h1>Modifier les permissions d'une personne</h1>
+    <form action="/authorizations" method="post">
+        <select name="auth-" id=""></select>
+    </form>
     <a href="/logout">Logout</a>
 </body>
 </html>

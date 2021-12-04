@@ -7,6 +7,7 @@ $sorties = Database::queryBuilder('sorties')
     ->where(
         Database::expr()::gt('date', date('Y-m-d'))
     )
+    ->orderBy('date')
     ->fetchAll();
 ?>
 
