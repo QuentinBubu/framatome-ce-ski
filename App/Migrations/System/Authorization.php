@@ -2,6 +2,7 @@
 
 namespace App\Migrations\System;
 
+use Bubu\Database\Actions\CreateColumn;
 use Bubu\Database\Database;
 
 class Authorization
@@ -20,7 +21,7 @@ class Authorization
         $db = Database::CreateTable('authorization')
         ->addColumn(
             Database::CreateColumn('id')
-                ->type('bigint')
+                ->type(CreateColumn::BIG_INT)
                 ->size('20')
                 ->notNull()
         )
@@ -34,11 +35,17 @@ class Authorization
         foreach ($authorizationName as $value) {
             $db->addColumn(
                 Database::createColumn($value)
-                    ->type('tinyint')
+                    ->type(CreateColumn::TINY_INT)
                     ->size(1)
                     ->defaultValue([0])
             );
         }
+        $db->addColumn(
+            Database::createColumn('reserve')
+                ->type(CreateColumn::TINY_INT)
+                ->size(1)
+                ->defaultValue([1])
+        );
         $db->execute();
     }
 }
